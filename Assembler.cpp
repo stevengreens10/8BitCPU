@@ -195,8 +195,6 @@ void processCode(std::string line) {
       currentAddr++;
       if (hasImmediate) {
         processImmediate(m[1].str());
-        bytes[currentAddr] = 0;
-        currentAddr++;
       }
       return;
     }
