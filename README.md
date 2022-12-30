@@ -6,3 +6,5 @@ You can load cpu.txt of falstad to load the circuit, and example programs are st
 
 Build the project with CMake and run the assembler with
 `./Assembler.exe programs/something.prog`. Copy the byte text into SRAM module and start the computer.
+
+![CPU circuit](./img/cpu.png)
