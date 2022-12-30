@@ -1,0 +1,39 @@
+; Basic program that prints "HELLO WORLD" with immediate char values
+; Then loops back to the beginning
+
+.code
+:start
+MOV A, 'H'
+OUTTXT
+
+MOV A, 'E'
+OUTTXT
+
+MOV A, 'L'
+OUTTXT
+
+MOV A, 'L'
+OUTTXT
+
+MOV A, 'O'
+OUTTXT
+
+MOV A, ' '
+OUTTXT
+
+MOV A, 'W'
+OUTTXT
+
+MOV A, 'O'
+OUTTXT
+
+MOV A, 'R'
+OUTTXT
+
+MOV A, 'L'
+OUTTXT
+
+MOV A, 'D'
+OUTTXT
+
+JMP start
