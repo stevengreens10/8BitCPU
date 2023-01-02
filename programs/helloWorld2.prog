@@ -12,42 +12,41 @@ text = "HELLO WORLD"
 :start
 
 ; idx = 0
-MOV MAR, &idx
 MOV A, 0
-STA
+STA &idx
 
 :loop
 
 ; A = idx + &text
-MOV MAR, &idx
-LDA 
+LDA &idx
 MOV B, &text
 ADD
 
 ; A = *(text+idx)
-MOV MAR, A
-LDA
+MOV A, &text
+LDB &idx
+ADD
+LDB A
+MOV B, A
 
 ; Output A as text
 OUTTXT
 
 ; A = idx
-MOV MAR, &idx
-LDA
+LDA &idx
 
 ; A = idx + 1
 MOV B, 1
 ADD
 
 ; idx = idx + 1
-MOV MAR, &idx
-STA
+STA &idx
 
 ; B = 10
 MOV B, 10
 
-; goto loop if idx > 10
+; goto loop if idx == 11
 CMP
-JG loop
+JE loop
 JMP start
 

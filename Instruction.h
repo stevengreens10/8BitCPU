@@ -6,9 +6,9 @@
 
 struct Instruction {
     std::string mnemonic;
-    // 4 bytes:
-    // <1st Control Signals Stage 2> | <2nd Control Signals Stage 2> | <1st Control Signals Stage 1> | <2nd Control Signals Stage 1>
-    unsigned int controlFlags;
+    // 5 bytes:
+    // <Conditionals> | <1st Control Signals Stage 2> | <2nd Control Signals Stage 2> | <1st Control Signals Stage 1> | <2nd Control Signals Stage 1>
+    unsigned long long controlFlags;
 };
 
 

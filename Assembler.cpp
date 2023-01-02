@@ -17,6 +17,9 @@ void processImmediate(std::string imm);
 
 std::unordered_map<std::string, unsigned char> dataAddrs;
 std::unordered_map<std::string, unsigned char> labelAddrs;
+
+std::unordered_map<std::string, unsigned char> unresolvedLabelAddrs;
+std::unordered_map<std::string, unsigned char> unresolvedDataAddrs;
 // Save room for "JMP, <codeBegin>"
 int currentAddr = 2;
 unsigned char codeBeginAddr = 0;
@@ -53,8 +56,40 @@ int main(int argc, char *argv[]) {
   }
 
   // JMP to beginning of code
-  bytes[0] = 14;
+  int jmpIdx = -1;
+  for(int i = 0; i < CPU::instructions.size(); i++) {
+    auto inst = CPU::instructions[i];
+    if(inst.mnemonic.starts_with("JMP")) {
+      jmpIdx = i;
+      break;
+    }
+  }
+
+  if(jmpIdx == -1) {
+    std::cerr << "Could not find JMP instruction";
+    return 1;
+  }
+
+  bytes[0] = jmpIdx;
   bytes[1] = codeBeginAddr;
+
+  // Fill in any unresolved data and label addresses
+  for (auto it = unresolvedDataAddrs.begin(); it != unresolvedDataAddrs.end(); it++) {
+    if(!dataAddrs.contains(it->first)) {
+      std::cout << "Variable " << it->first << " was never declared" << std::endl;
+      return 1;
+    }
+
+    bytes[it->second] = dataAddrs[it->first];
+  }
+  for (auto it = unresolvedLabelAddrs.begin(); it != unresolvedLabelAddrs.end(); it++) {
+    if(!labelAddrs.contains(it->first)) {
+      std::cout << "Label " << it->first << " was never declared" << std::endl;
+      return 1;
+    }
+
+    bytes[it->second] = labelAddrs[it->first];
+  }
 
   std::cout << "0: ";
   for (const auto &byte: bytes) {
@@ -212,8 +247,10 @@ void processImmediate(std::string imm) {
     auto varName = m[1].str();
 
     if (!dataAddrs.contains(varName)) {
-      std::cerr << "Referenced variable: " << varName << " has not been declared";
-      exit(1);
+      unresolvedDataAddrs[varName] = currentAddr;
+      bytes[currentAddr] = 0;
+      currentAddr++;
+      return;
     }
 
     unsigned char addr = dataAddrs[varName];
@@ -277,8 +314,10 @@ void processImmediate(std::string imm) {
     auto labelName = m[1].str();
 
     if (!labelAddrs.contains(labelName)) {
-      std::cerr << "Referenced label: " << labelName << " has not been declared";
-      exit(1);
+      unresolvedLabelAddrs[labelName] = currentAddr;
+      bytes[currentAddr] = 0;
+      currentAddr++;
+      return;
     }
 
     unsigned char addr = labelAddrs[labelName];

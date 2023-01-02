@@ -1,0 +1,14 @@
+; Simple program to test out unconditional and conditional jumps
+.code
+:start
+MOV A, 1
+Mov B, 1
+CMP
+JE equal
+MOV A, 0
+OUT
+JMP start
+
+:equal
+OUT
+JMP start

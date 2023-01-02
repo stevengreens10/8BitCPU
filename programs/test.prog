@@ -1,19 +1,4 @@
-; Simple test program that adds two values from memory and displays
-; it to output. Then jumps back to the beginning
-
-.data
-
-var1 = 0xAA
-var2 = 0x55
-
 .code
 :start
-MOV MAR, &var1
-LDA
-
-MOV MAR, &var2
-LDB
-
-ADD
-OUT
-JMP start
+CMP
+JE start

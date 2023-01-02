@@ -1,0 +1,47 @@
+; Program to compute N fibonacci numbers and display it to the output
+
+.data
+
+; Number in the fib sequence you want minus 1
+numFibNumbers = 5
+
+idx = 0
+tmp1 = 0
+tmp2 = 0
+
+.code
+:start
+MOV A, 0
+STA &tmp2
+MOV B, 1
+STB &tmp1
+
+:loop
+
+; Restore A and B (swapped)
+LDA &tmp2
+LDB &tmp1
+
+; A = A + B
+ADD
+
+; Store A and B
+STA &tmp1
+STB &tmp2
+
+; idx = idx + 1
+LDA &idx
+MOV B, 1
+ADD
+STA &idx
+
+LDA &idx
+LDB &numFibNumbers
+CMP
+JE display
+JMP loop
+
+:display
+LDA &tmp1
+OUT
+JMP display

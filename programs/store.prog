@@ -1,0 +1,12 @@
+; Simple program for testing the STA instruction (store A into memory)
+.data
+
+value = 0
+
+.code
+:start
+MOV A, 0xAA
+STA &value
+LDA &value
+OUT
+JMP start
