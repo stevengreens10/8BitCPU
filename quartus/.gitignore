@@ -1,0 +1,9 @@
+# Blacklist everything by default
+*
+# Allow all directories
+!*/
+# Only allow relevant files
+!*.v
+!*.qpf
+!*.qsf
+!.gitignore
